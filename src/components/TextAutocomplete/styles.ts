@@ -3,7 +3,11 @@ import { makeStyles } from "@material-ui/core";
 export const useStyles = makeStyles(t => ({
     container: {
         display: 'flex',
-        gap: t.spacing(4)
+        gap: t.spacing(4),
+        [t.breakpoints.down('md')]: {
+            gap: t.spacing(2),
+            flexDirection: 'column'
+        }
     },
     input: {
         padding: t.spacing(1),
@@ -28,6 +32,11 @@ export const useStyles = makeStyles(t => ({
         '&:hover': {
             backgroundColor: '#fff',
             
+        },
+        [t.breakpoints.down('md')]: {
+            rigth: 0,
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
         }
     }
 }))

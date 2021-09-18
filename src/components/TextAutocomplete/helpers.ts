@@ -2,7 +2,7 @@ const TATAR_DIFF_ABC = ["ә","җ","ң","ө","ү","һ"]
 
 export type Langs = "ru"|"tat"
 
-export const TRANSLATE_LANGS: Record<string, string> = {
+export const TRANSLATE_LANGS: Record<Langs, string> = {
     'ru': 'Русский',
     'tat': 'Татарский'
 }

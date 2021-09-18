@@ -3,7 +3,11 @@ import { makeStyles } from "@material-ui/core";
 export const useStyles = makeStyles(t => ({
     container: {
         display: 'flex',
-        gap: t.spacing(4)
+        gap: t.spacing(4),
+        [t.breakpoints.down('md')]:{
+            flexDirection: 'column',
+            gap: t.spacing(2), 
+        }
     },
     input: {
         padding: t.spacing(1),

@@ -37,11 +37,14 @@ export const AudioTranslate = () => {
         });
     }
 
-    const toggleRecording = () => {
+    const toggleRecording = async () => {
         if (isRecording)
             mediaRecorder.current?.stop()
-        else
-            getMediaRecorder()
+        else {
+            audioEl.current = null
+            setDuration(0)
+            await getMediaRecorder()
+        }
         setIsRecording(p => !p)
     }
 
@@ -60,8 +63,10 @@ export const AudioTranslate = () => {
     const handleTranslate = () => { }
 
     function handleListenDuration(this: HTMLAudioElement, e: Event) {
-        if (this.duration !== Infinity)
+        if (this.duration !== Infinity) {
+            console.log(this.duration)
             setDuration(this.duration)
+        }
     }
     function handleListenCurrentTume(this: HTMLAudioElement, e: Event) {
         setCurrentTime(this.currentTime)
@@ -79,6 +84,13 @@ export const AudioTranslate = () => {
             }
         }
     }, [audioEl.current])
+
+    // useEffect(() => {
+    //     if (audioEl.current && !isRecording) {
+    //         audioEl.current.addEventListener('durationchange', handleListenDuration)
+    //         audioEl.current.addEventListener('timeupdate', handleListenCurrentTume)
+    //     }
+    // }, [audioEl.current, isRecording])
 
     return (
         <MainContainer>

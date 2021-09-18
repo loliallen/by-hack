@@ -13,6 +13,6 @@ export const TranslateButton: React.FC<Props> = ({ onClick }) => {
             color="primary"
             onClick={onClick}
             startIcon={<Translate />}
-        >Translate</Button>
+        >Перевести</Button>
     )
 }
