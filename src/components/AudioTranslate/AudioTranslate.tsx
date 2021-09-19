@@ -4,7 +4,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { MainContainer } from '../../containers/MainContainer'
 import { TranslateButton } from '../../containers/TranslateButton/TranslateButton'
 import audio from '../../service/audio'
+import { AudioPlayer } from '../AudioPlayer/AudioPlayer'
 import { Langs, TRANSLATE_LANGS } from '../TextAutocomplete/helpers'
+import { translate } from './helper'
 import { useStyles } from './style'
 
 export const AudioTranslate = () => {
@@ -19,6 +21,12 @@ export const AudioTranslate = () => {
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
     const [currentTime, setCurrentTime] = useState<number>(0)
     const [duration, setDuration] = useState<number>(0)
+    const [responseType, setResponseType] = useState<"text" | "audio">("text")
+    const [response, setResponse] = useState<{
+        result_variant: string;
+        translated_text: string;
+        translation_file_url: string;
+    } | null>(null)
 
 
     const getMediaRecorder = async () => {
@@ -66,7 +74,8 @@ export const AudioTranslate = () => {
 
     const handleTranslate = async () => {
         try {
-            const res = audio.translate(lang, audioFile!)
+            console.log(audioFile)
+            const res = await translate(lang, audioFile!, responseType)
             console.log(res)
         } catch (e) {
             console.error(e)
@@ -110,7 +119,7 @@ export const AudioTranslate = () => {
                 onChange={(e) => setLang(e.target.value as Langs)}
             >
                 {Object.keys(TRANSLATE_LANGS).map(k => (
-                    <MenuItem value={k}>{TRANSLATE_LANGS[k]}</MenuItem>
+                    <MenuItem key={k} value={k}>{TRANSLATE_LANGS[k]}</MenuItem>
                 ))}
             </Select>
             <div className={classes.form}>
@@ -137,7 +146,15 @@ export const AudioTranslate = () => {
                 <TranslateButton onClick={handleTranslate}>Translate</TranslateButton>
             </div>
             <div className={classes.response_form}>
-                Response
+                {response && <div>
+                    {response.result_variant === "text" &&
+                        <div>{response.translated_text}</div>
+                    }
+                    {response.result_variant === "audio" &&
+                        <AudioPlayer src={response.translation_file_url} />
+                    }
+                </div>
+                }
             </div>
         </MainContainer >
     )
