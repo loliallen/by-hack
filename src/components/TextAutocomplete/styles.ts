@@ -27,7 +27,7 @@ export const useStyles = makeStyles((t) => ({
     backgroundColor: "#fff",
     position: "absolute",
     transform: "translateX(-50%)",
-    top: t.spacing(3),
+    top: t.spacing(8),
     left: "50%",
     zIndex: 1,
     padding: 0,
