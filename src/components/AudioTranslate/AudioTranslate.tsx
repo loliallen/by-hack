@@ -1,8 +1,10 @@
-import { Button, IconButton, Slider, Typography } from '@material-ui/core'
+import { Button, IconButton, Slider, Select, MenuItem } from '@material-ui/core'
 import { Mic, Translate } from '@material-ui/icons'
 import React, { useEffect, useRef, useState } from 'react'
 import { MainContainer } from '../../containers/MainContainer'
 import { TranslateButton } from '../../containers/TranslateButton/TranslateButton'
+import audio from '../../service/audio'
+import { Langs, TRANSLATE_LANGS } from '../TextAutocomplete/helpers'
 import { useStyles } from './style'
 
 export const AudioTranslate = () => {
@@ -10,7 +12,9 @@ export const AudioTranslate = () => {
     const mediaRecorder: React.MutableRefObject<MediaRecorder | null> = useRef(null)
 
     const audioEl: React.MutableRefObject<HTMLAudioElement | null> = useRef(null)
-    const [audioDURL, setAudioDURL] = useState<string>("")
+    const [audioFile, setAudioFile] = useState<File | null>(null)
+    const [lang, setLang] = useState<Langs>('ru')
+
     const [isRecording, setIsRecording] = useState<boolean>(false)
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
     const [currentTime, setCurrentTime] = useState<number>(0)
@@ -33,7 +37,7 @@ export const AudioTranslate = () => {
             const audio = new Audio(audioUrl);
             audioEl.current = audio
 
-            setAudioDURL(audioUrl)
+            setAudioFile(new File([audioBlob], "audio.wav", { type: "audio/x-wav" }))
         });
     }
 
@@ -60,7 +64,14 @@ export const AudioTranslate = () => {
     const handleChangeCurrentTime = (event: React.ChangeEvent<{}>, value: number | number[]) =>
         setCurrentTime(value as number)
 
-    const handleTranslate = () => { }
+    const handleTranslate = async () => {
+        try {
+            const res = audio.translate(lang, audioFile!)
+            console.log(res)
+        } catch (e) {
+            console.error(e)
+        }
+    }
 
     function handleListenDuration(this: HTMLAudioElement, e: Event) {
         if (this.duration !== Infinity) {
@@ -94,6 +105,14 @@ export const AudioTranslate = () => {
 
     return (
         <MainContainer>
+            <Select
+                value={lang}
+                onChange={(e) => setLang(e.target.value as Langs)}
+            >
+                {Object.keys(TRANSLATE_LANGS).map(k => (
+                    <MenuItem value={k}>{TRANSLATE_LANGS[k]}</MenuItem>
+                ))}
+            </Select>
             <div className={classes.form}>
                 <div className={classes.input}>
                     <IconButton

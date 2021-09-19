@@ -50,7 +50,9 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/lodash": "^4.14.173",
     "@types/react-router": "^5.1.16",
-    "@types/react-router-dom": "^5.1.9"
+    "@types/react-router-dom": "^5.1.9",
+    "lodash": "^4.17.21"
   }
 }
